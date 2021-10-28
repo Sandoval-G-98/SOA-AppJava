@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">La Clande</string>
+    <string name="subject">Codigo de verificacion LaClande</string>
+    <string name="msgCodeVerification">Su codigo de verificacion es: </string>
 </resources>

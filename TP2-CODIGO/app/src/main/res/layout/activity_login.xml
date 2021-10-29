@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/batteryLevel2"
+        android:layout_width="108dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="wrap_content"
@@ -14,10 +26,10 @@
         android:text="Ingresar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/TextPassword" />
 
     <Button
-        android:id="@+id/buittonRegister"
+        android:id="@+id/buttonRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Registrar"
@@ -28,26 +40,30 @@
         app:layout_constraintVertical_bias="0.146" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/TextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:hint="Contraseña"
-        android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
-        tools:layout_editor_absoluteX="93dp" />
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextUser" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/TextUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="52dp"
         android:ems="10"
         android:hint="Usuario"
         android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:layout_editor_absoluteX="93dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView2"
@@ -56,7 +72,8 @@
         android:layout_marginTop="64dp"
         android:text="La Clande"
         android:textSize="34sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="131dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

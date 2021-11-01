@@ -1,4 +1,4 @@
-package Battery;
+package utils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

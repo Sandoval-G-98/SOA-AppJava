@@ -2,20 +2,26 @@ package RegisterCreateClande;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.Authentication.R;
-import Battery.Battery;
+import utils.Battery;
 import CreateClande.CreateClande;
 import JoinClande.JoinClande;
 
 public class RegisterOrCreateClande extends AppCompatActivity {
 
     private TextView batteryLevel;
+    private String email;
+    private TextView clanders10to18;
+    private TextView clandes10to18;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +31,21 @@ public class RegisterOrCreateClande extends AppCompatActivity {
         Button registerClande = findViewById(R.id.buttonRegisterClande);
         Button joinClande = findViewById(R.id.buttonJoinClande);
 
+        email = getIntent().getStringExtra("email");
+
         batteryLevel = findViewById(R.id.batteryLevel3);
         Battery bat = new Battery(batteryLevel);
         this.registerReceiver(bat.setBatInfo(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        clandes10to18 = findViewById(R.id.clandesCreate10To18hours);
+        clanders10to18 = findViewById(R.id.clanders10to18hours);
+
+        readPreferences();
 
         registerClande.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent registerClandeActivity = new Intent(RegisterOrCreateClande.this, CreateClande.class);
+                registerClandeActivity.putExtra("email", email);
                 startActivity(registerClandeActivity);
             }
         });
@@ -41,9 +54,18 @@ public class RegisterOrCreateClande extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent joinClandeActivity = new Intent(RegisterOrCreateClande.this, JoinClande.class);
+                joinClandeActivity.putExtra("email", email);
                 startActivity(joinClandeActivity);
             }
         });
 
+    }
+
+    public void readPreferences(){
+
+        preferences = getSharedPreferences("metrics", Context.MODE_PRIVATE);
+
+        clanders10to18.setText(String.valueOf(preferences.getInt("logingClanders_10_to_18", 0)));
+        clandes10to18.setText(String.valueOf(preferences.getInt("registerClande_10_to_18", 0)));
     }
 }

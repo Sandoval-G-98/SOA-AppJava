@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import Asincrono.AsyncSendEmail;
-import Battery.Battery;
+import utils.Battery;
 import Login.Login;
 
 public class MainActivity extends Activity {
@@ -73,6 +73,7 @@ public class MainActivity extends Activity {
                 if( checkCode(codeValidate) ) {
                     code = new Random().nextInt(9999) + 1000;
                     Intent loginActivity = new Intent(MainActivity.this, Login.class);
+                    loginActivity.putExtra("email", rec);
                     startActivity(loginActivity);
                 } else {
                     Toast.makeText(getBaseContext(), "Código erroneo", Toast.LENGTH_LONG).show();

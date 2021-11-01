@@ -3,6 +3,7 @@
     package="com.example.Authentication">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer"/>
 
     <application
         android:allowBackup="true"
@@ -11,9 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LaClande">
-        <activity android:name="JoinClande.JoinClande"></activity>
+        <activity android:name="JoinClande.JoinClande"/>
         <activity android:name="CreateClande.CreateClande" />
-        <activity android:name="RegisterClande.RegisterClande" />
         <activity android:name="RegisterCreateClande.RegisterOrCreateClande" />
         <activity android:name="Login.Login" />
         <activity android:name=".MainActivity">

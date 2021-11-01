@@ -2,8 +2,11 @@ package Login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.SharedElementCallback;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,12 +16,17 @@ import android.widget.Toast;
 
 import com.example.Authentication.R;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import RegisterCreateClande.RegisterOrCreateClande;
-import Battery.Battery;
+import utils.Battery;
 
 public class Login extends AppCompatActivity {
 
-    TextView batteryLevel;
+    private TextView batteryLevel;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,25 +44,25 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                EditText userName = findViewById(R.id.TextUser);
+                EditText userEmail = findViewById(R.id.TextUserEmail);
                 EditText userPassword = findViewById(R.id.TextPassword);
-                String user = userName.getText().toString();
+                String email = userEmail.getText().toString();
                 String password = userPassword.getText().toString();
 
-                if(user.isEmpty())
-                    Toast.makeText(getBaseContext(), "El nombre de usuario no puede estar vacio", Toast.LENGTH_LONG).show();
+                if(email.isEmpty() || !checkEmail(email))
+                    Toast.makeText(getBaseContext(), "Email invalido", Toast.LENGTH_LONG).show();
                 else if(password.isEmpty())
                     Toast.makeText(getBaseContext(), "La contraseña no puede estar vacia", Toast.LENGTH_LONG).show();
                 else {
-                    Boolean isCorrectCrdentials = checkCredentials("Gabriel", "Sandoval");
-                    if(isCorrectCrdentials){
+                    Boolean isCorrectCredentials = checkCredentials(email, password);
+                    if(isCorrectCredentials){
+                        storePreference();
                         Intent appActivity = new Intent(Login.this, RegisterOrCreateClande.class);
+                        appActivity.putExtra("email", email);
                         startActivity(appActivity);
                     }
 
                 }
-
-
             }
         });
 
@@ -65,11 +73,34 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-        private boolean checkCredentials(String userName, String password){
+        private boolean checkCredentials(String userEmail, String password){
             Toast.makeText(getBaseContext(), "Checkeando credenciales", Toast.LENGTH_LONG).show();
-            Toast.makeText(getBaseContext(), "Usuario: " + userName, Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Email: " + userEmail, Toast.LENGTH_LONG).show();
             Toast.makeText(getBaseContext(), "Contraseña: " + password, Toast.LENGTH_LONG).show();
             return true;
         }
+
+    public boolean checkEmail(String email){
+        // Validar email
+        Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        Matcher mather = pattern.matcher(email);
+        return mather.find();
+    }
+
+    public void storePreference(){
+        preferences = getSharedPreferences("metrics", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        int info;
+
+        info = preferences.getInt("logingClanders_10_to_18", 0);
+        if(info==0){
+            info = 1;
+        } else {
+            info+= info;
+        }
+        editor.putInt("logingClanders_10_to_18",info);
+        editor.commit();
+    }
+
 
 }

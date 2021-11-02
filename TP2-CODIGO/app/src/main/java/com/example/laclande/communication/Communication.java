@@ -29,12 +29,12 @@ public class Communication {
         try{
             data.put("email", email);
             data.put("password", password);
-            URL url = new URL(URL_REGISTER);
+            URL url = new URL(URL_LOGIN);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             http.setDoOutput(true);
             http.setDoInput(true);
-            http.setConnectTimeout(25000);
+            http.setConnectTimeout(5000);
             http.setRequestMethod("POST");
 
             DataOutputStream dataOutputStream = new DataOutputStream(http.getOutputStream());
@@ -47,7 +47,7 @@ public class Communication {
                 InputStreamReader inputStreamReader = new InputStreamReader(http.getInputStream());
                 result = convertInputStreamToString(inputStreamReader).toString();
             } else if(http.getResponseCode() == HttpURLConnection.HTTP_BAD_REQUEST){
-                InputStreamReader inputStreamReader = new InputStreamReader(http.getInputStream());
+                InputStreamReader inputStreamReader = new InputStreamReader(http.getErrorStream());
                 result = convertInputStreamToString(inputStreamReader).toString();
             }else {
                 result = ERROR_MSG;
@@ -113,7 +113,7 @@ public class Communication {
                 result = convertInputStreamToString(inputStreamReader).toString();
                 Log.d("Debug", "Peticion correcta");
             } else if(http.getResponseCode() == HttpURLConnection.HTTP_BAD_REQUEST){
-                InputStreamReader inputStreamReader = new InputStreamReader(http.getInputStream());
+                InputStreamReader inputStreamReader = new InputStreamReader(http.getErrorStream());
                 result = convertInputStreamToString(inputStreamReader).toString();
                 Log.d("Debug", "Peticion incorrecta");
             }else {

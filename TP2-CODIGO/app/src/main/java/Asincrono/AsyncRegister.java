@@ -1,4 +1,4 @@
-package com.example.laclande.asyncRegister;
+package Asincrono;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -8,12 +8,13 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.example.laclande.communication.Communication;
-import com.example.laclande.login.LoginActivity;
-import com.example.laclande.register.RegisterActivity;
 import com.example.laclande.user.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import login.LoginActivity;
+import register.RegisterActivity;
 
 public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
     private RegisterActivity registerActivity;

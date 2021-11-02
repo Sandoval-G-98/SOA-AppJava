@@ -2,19 +2,12 @@ package com.example.Authentication;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.mail.Session;
-
-import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,9 +18,15 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.mail.Session;
+
 import Asincrono.AsyncSendEmail;
+import login.LoginActivity;
 import utils.Battery;
-import Login.Login;
 
 public class MainActivity extends Activity {
 
@@ -82,7 +81,7 @@ public class MainActivity extends Activity {
                 codeValidate = textCode.getText().toString();
                 if( checkCode(codeValidate) ) {
                     code = new Random().nextInt(9999) + 1000;
-                    Intent loginActivity = new Intent(MainActivity.this, Login.class);
+                    Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
                     loginActivity.putExtra("email", rec);
                     startActivity(loginActivity);
                 } else {

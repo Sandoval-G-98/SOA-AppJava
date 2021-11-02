@@ -1,14 +1,17 @@
-package com.example.laclande.asyncLogin;
+package Asincrono;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.laclande.communication.Communication;
-import com.example.laclande.login.LoginActivity;
 import com.example.laclande.user.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import RegisterCreateClande.RegisterOrCreateClande;
+import login.LoginActivity;
 
 public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
     private LoginActivity loginActivity;
@@ -59,6 +62,8 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean){
         if(aBoolean){
             this.loginActivity.showMessage("Credenciales correctas.");
+            Intent registerOrCreateClande = new Intent(this.loginActivity, RegisterOrCreateClande.class);
+            this.loginActivity.startActivity(registerOrCreateClande);
         }else {
             this.loginActivity.showMessage(this.messageError);
         }

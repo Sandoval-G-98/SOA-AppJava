@@ -1,4 +1,4 @@
-package com.example.laclande.login;
+package login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +10,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.laclande.R;
-import com.example.laclande.asyncLogin.AsyncLogin;
-import com.example.laclande.register.RegisterActivity;
+import com.example.Authentication.R;
 
 import java.util.regex.Pattern;
+
+import Asincrono.AsyncLogin;
+import register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail;

@@ -34,7 +34,7 @@ public class Communication {
             http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             http.setDoOutput(true);
             http.setDoInput(true);
-            http.setConnectTimeout(5000);
+            http.setConnectTimeout(25000);
             http.setRequestMethod("POST");
 
             DataOutputStream dataOutputStream = new DataOutputStream(http.getOutputStream());
@@ -106,7 +106,7 @@ public class Communication {
 
             dataOutputStream.flush();
             http.connect();
-            Log.d("Debug", "Inicia coneccion");
+            Log.d("Debug", "Inicia conexion");
 
             if(http.getResponseCode() == HttpURLConnection.HTTP_OK || http.getResponseCode() == HttpURLConnection.HTTP_CREATED){
                 InputStreamReader inputStreamReader = new InputStreamReader(http.getInputStream());

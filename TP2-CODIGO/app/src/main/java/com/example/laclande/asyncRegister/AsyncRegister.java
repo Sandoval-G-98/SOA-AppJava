@@ -1,5 +1,6 @@
 package com.example.laclande.asyncRegister;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.example.laclande.communication.Communication;
+import com.example.laclande.login.LoginActivity;
 import com.example.laclande.register.RegisterActivity;
 import com.example.laclande.user.User;
 
@@ -36,6 +38,9 @@ public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
                 objects[5].toString(),
                 objects[6].toString());
 
+
+        Log.d("Debug", response);
+
         if(response.compareTo(communication.ERROR_MSG) == 0){
             this.message = "Error en la conexion.";
             return false;
@@ -47,6 +52,9 @@ public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
 
             if(result.get("success").toString().compareTo("true") == 0){
                 this.user = new User(objects[3].toString(), result.get("token").toString(), result.get("token_refresh").toString());
+                Log.d("Debug", this.user.getEmail());
+                Log.d("Debug", this.user.getToken());
+                Log.d("Debug", this.user.getTokenRefresh());
                 return true;
             } else {
                 this.message = result.get("msg").toString();
@@ -62,7 +70,9 @@ public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         if(aBoolean){
-            this.registerActivity.showMessage("PETICION EXITOSA");
+            this.registerActivity.showMessage("Registro exitoso.");
+            Intent Login = new Intent(this.registerActivity, LoginActivity.class);
+            registerActivity.startActivity(Login);
         }else {
             this.registerActivity.showMessage(this.message);
         }

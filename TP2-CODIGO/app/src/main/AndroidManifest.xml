@@ -14,11 +14,20 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LaClande">
+        android:theme="@style/Theme.LaClande"
+        android:usesCleartextTraffic="true">
         <activity android:name="JoinClande.JoinClande"/>
         <activity android:name="CreateClande.CreateClande" />
         <activity android:name="RegisterCreateClande.RegisterOrCreateClande" />
-        <activity android:name="Login.Login" />
+
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="true"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".register.RegisterActivity"
+            android:exported="true"
+            android:label="@string/title_activity_register" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

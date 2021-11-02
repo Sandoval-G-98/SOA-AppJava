@@ -1,8 +1,12 @@
 package JoinClande;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import com.example.laclande.login.LoginActivity;
 
 import com.example.Authentication.R;
 
@@ -14,6 +18,5 @@ public class JoinClande extends AppCompatActivity {
         setContentView(R.layout.activity_join_clande);
 
     }
-
 
 }

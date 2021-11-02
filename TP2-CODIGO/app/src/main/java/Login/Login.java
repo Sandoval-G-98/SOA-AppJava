@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.Authentication.R;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +28,8 @@ public class Login extends AppCompatActivity {
     private TextView batteryLevel;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    final int LIMIT_SUP_HOUR = 18;
+    final int LIMIT_INF_HOUR = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class Login extends AppCompatActivity {
                 else {
                     Boolean isCorrectCredentials = checkCredentials(email, password);
                     if(isCorrectCredentials){
-                        storePreference();
+                        //storePreference();
                         Intent appActivity = new Intent(Login.this, RegisterOrCreateClande.class);
                         appActivity.putExtra("email", email);
                         startActivity(appActivity);
@@ -73,34 +76,34 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-        private boolean checkCredentials(String userEmail, String password){
-            Toast.makeText(getBaseContext(), "Checkeando credenciales", Toast.LENGTH_LONG).show();
-            Toast.makeText(getBaseContext(), "Email: " + userEmail, Toast.LENGTH_LONG).show();
-            Toast.makeText(getBaseContext(), "Contraseña: " + password, Toast.LENGTH_LONG).show();
-            return true;
-        }
 
-    public boolean checkEmail(String email){
+    private boolean checkCredentials(String userEmail, String password){
+        Toast.makeText(getBaseContext(), "Checkeando credenciales", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Email: " + userEmail, Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Contraseña: " + password, Toast.LENGTH_LONG).show();
+        return true;
+    }
+
+    private boolean checkEmail(String email){
         // Validar email
         Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
         Matcher mather = pattern.matcher(email);
         return mather.find();
     }
 
-    public void storePreference(){
-        preferences = getSharedPreferences("metrics", Context.MODE_PRIVATE);
-        editor = preferences.edit();
-        int info;
+    private void storePreference(){
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
 
-        info = preferences.getInt("logingClanders_10_to_18", 0);
-        if(info==0){
-            info = 1;
-        } else {
-            info+= info;
+        if( LIMIT_INF_HOUR <= hour && hour <= LIMIT_SUP_HOUR ) {
+            preferences = getSharedPreferences("metrics_login_clanders", Context.MODE_PRIVATE);
+            editor = preferences.edit();
+
+            int info = preferences.getInt("logingClanders_10_to_18", 0);
+            info += 1;
+
+            editor.putInt("logingClanders_10_to_18", info);
+            editor.commit();
         }
-        editor.putInt("logingClanders_10_to_18",info);
-        editor.commit();
     }
-
-
 }

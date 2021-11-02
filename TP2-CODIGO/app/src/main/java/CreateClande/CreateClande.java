@@ -14,17 +14,18 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.Authentication.R;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
 import utils.Battery;
@@ -55,6 +56,8 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     int mov=0;
+    final int LIMIT_SUP_HOUR = 18;
+    final int LIMIT_INF_HOUR = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +117,7 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
                 TimePickerDialog tmd = new TimePickerDialog(CreateClande.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String hourFromClande = hourOfDay + " : " + minute;
+                        String hourFromClande = hourOfDay + ":" + minute;
                         edViewFromHourClande.setText(hourFromClande);
                     }
                 }, 00, 00, true);
@@ -128,7 +131,7 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
                 TimePickerDialog tmd = new TimePickerDialog(CreateClande.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String hourToClande = hourOfDay + " : " + minute;
+                        String hourToClande = hourOfDay + ":" + minute;
                         edViewToHourClande.setText(hourToClande);
                     }
                 }, 06, 00, true);
@@ -174,13 +177,11 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         super.onPause();
-        sm.unregisterListener(CreateClande.this);
+        sm.unregisterListener(this);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
-        System.out.println("Valor de x: " + event.values[0]);
 
         if(event.values[0] > 5 && mov == 0) {
             mov++;
@@ -191,30 +192,73 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
         if(mov == 2) {
             mov=0;
             Toast.makeText(context, "Se creó la clande correctamente", Toast.LENGTH_LONG).show();
-            storePreference();
+            //storePreference();
+            grabar(email,province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
+            read("test_registers_" + email + ".txt");
             Intent createOrJoinClandeActivity = new Intent(CreateClande.this, RegisterOrCreateClande.class);
             createOrJoinClandeActivity.putExtra("email",email);
             startActivity(createOrJoinClandeActivity);
         }
     }
 
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-    public void storePreference() {
-        preferences = getSharedPreferences("metrics", Context.MODE_PRIVATE);
-        editor = preferences.edit();
-        int info;
+    private void storePreference() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
 
-        info = preferences.getInt("registerClande_10_to_18", 0);
-        if(info==0){
-            info = 1;
-        } else {
-            info+= info;
+        if( LIMIT_INF_HOUR <= hour && hour <= LIMIT_SUP_HOUR ) {
+            preferences = getSharedPreferences("metrics_register_clandes", Context.MODE_PRIVATE);
+            editor = preferences.edit();
+
+            int info = preferences.getInt("registerClande_10_to_18", 0);
+            info+= 1;
+
+            editor.putInt("registerClande_10_to_18",info);
+            editor.commit();
         }
+    }
 
-        editor.putInt("registerClande_10_to_18",info);
-        editor.commit();
+    private void grabar(String email, String provinceClande, String localityClande, String postalCodeClande, String streetClande,
+                        String altitudeClande, String descriptionClande, String fromHourClande, String toHourClande, String dateClande){
+        String nombreArchivo = "test_registers_" + email + ".txt";
+        String contenido = email + "|" + provinceClande + "|" + localityClande + "|" + postalCodeClande + "|" + streetClande + "|" + altitudeClande + "|"
+                + descriptionClande + "|" + fromHourClande + "|" + toHourClande + "|" + dateClande;
+
+        try {
+            OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput(nombreArchivo, Context.MODE_PRIVATE));
+            archivo.write(contenido);
+            archivo.flush();
+            archivo.close();
+            System.out.println("Termine el try del write");
+        } catch (Exception e){
+            System.out.println("Entre al catch del write");
+            e.printStackTrace();
+        }
+    }
+
+    private void read(String filename){
+        String nombreArchivo = filename;
+
+        try {
+            InputStreamReader archivo = new InputStreamReader(openFileInput(nombreArchivo));
+            BufferedReader br = new BufferedReader(archivo);
+            String linea = br.readLine();
+            String contenido = "";
+            while(linea != null){
+                contenido = contenido + linea + "\n";
+                linea = br.readLine();
+            }
+            System.out.println( "Read " + contenido);
+            br.close();
+            archivo.close();
+            System.out.println("Termine el try del read");
+        } catch (Exception e){
+            System.out.println("Entre al catch del read");
+            e.printStackTrace();
+        }
     }
 }

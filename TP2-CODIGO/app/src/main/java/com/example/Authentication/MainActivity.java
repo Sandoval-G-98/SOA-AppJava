@@ -1,8 +1,11 @@
 package com.example.Authentication;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import java.util.Random;
@@ -19,6 +22,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+
 import Asincrono.AsyncSendEmail;
 import utils.Battery;
 import Login.Login;
@@ -31,7 +37,9 @@ public class MainActivity extends Activity {
     String rec, subject, textMessage, codeValidate;
     int code = new Random().nextInt(9999) + 1000;
     TextView batteryLevel;
+    int REQUEST_CODE = 200;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +55,8 @@ public class MainActivity extends Activity {
         receiver = findViewById(R.id.EmailAddress);
 
         Button verCode = findViewById(R.id.buttonVerificationCode);
+
+        checkPermissions();
 
         buttonSend.setOnClickListener(new OnClickListener() {
             @Override
@@ -92,5 +102,25 @@ public class MainActivity extends Activity {
     public boolean checkCode(String codeValidate){
         // Validar codigo
         return (!codeValidate.isEmpty() && codeValidate.matches("[0-9]*") && Integer.parseInt(codeValidate) == code);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkPermissions() {
+        int permissionWriterExternal = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionReadExternal = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int permissionManageExternal = ContextCompat.checkSelfPermission(this,  android.Manifest.permission.MANAGE_EXTERNAL_STORAGE);
+
+        if(permissionWriterExternal == PackageManager.PERMISSION_DENIED){
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
+
+        if(permissionReadExternal == PackageManager.PERMISSION_DENIED){
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
+
+        if(permissionManageExternal == PackageManager.PERMISSION_DENIED){
+            requestPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
+
     }
 }

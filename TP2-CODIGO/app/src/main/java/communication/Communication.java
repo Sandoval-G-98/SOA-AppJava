@@ -1,4 +1,4 @@
-package com.example.laclande.communication;
+package communication;
 
 import android.os.Build;
 import android.util.Log;

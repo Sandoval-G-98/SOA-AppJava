@@ -1,6 +1,7 @@
 package register;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
 
 import Asincrono.AsyncRegister;
 import login.LoginActivity;
+import utils.BatteryReceiver;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText inputEmail;
@@ -35,6 +37,8 @@ public class RegisterActivity extends AppCompatActivity {
     private String dni;
     private String commission;
     private String group;
+    private TextView batteryLevel;
+    private BatteryReceiver battery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,10 @@ public class RegisterActivity extends AppCompatActivity {
         spinnerCommission = findViewById(R.id.commission);
         inputGroup = findViewById(R.id.group);
 
+        batteryLevel = findViewById(R.id.batteryLevel3);
+        battery = new BatteryReceiver(batteryLevel);
+        registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
         TextView buttonToBack = findViewById(R.id.toBack);
         buttonToBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +65,12 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(login);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy(){
+        unregisterReceiver(battery);
+        super.onDestroy();
     }
 
     public void handleRegister(View view) {

@@ -1,7 +1,5 @@
 package CreateClande;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -13,6 +11,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,20 +19,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
+import android.util.Log;
 import com.example.Authentication.R;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
-import utils.Battery;
+import utils.BatteryReceiver;
 import RegisterCreateClande.RegisterOrCreateClande;
 
 public class CreateClande extends AppCompatActivity implements SensorEventListener {
 
     private TextView batteryLevel;
+    private BatteryReceiver battery;
     private Button buttonCreateClande;
     private EditText edViewProvince, edViewLocality, edViewPostalCode, edViewStreetName, edViewAltitudeStreet, edViewDescription, edViewFromHourClande, edViewToHourClande, edViewDateClande;
     private String province;
@@ -66,9 +65,9 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
 
         email = getIntent().getStringExtra("email");
 
-        batteryLevel = findViewById(R.id.batteryLevel4);
-        Battery bat = new Battery(batteryLevel);
-        this.registerReceiver(bat.setBatInfo(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        batteryLevel = findViewById(R.id.batteryLevel5);
+        battery = new BatteryReceiver(batteryLevel);
+        registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -175,9 +174,10 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
         sm.unregisterListener(this);
+        unregisterReceiver(battery);
+        super.onDestroy();
     }
 
     @Override
@@ -233,9 +233,9 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
             archivo.write(contenido);
             archivo.flush();
             archivo.close();
-            System.out.println("Termine el try del write");
+            Log.d("Debug", "termine el try de grabar");
         } catch (Exception e){
-            System.out.println("Entre al catch del write");
+            Log.d("Debug", "entre al catch en grabar");
             e.printStackTrace();
         }
     }
@@ -255,9 +255,9 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
             System.out.println( "Read " + contenido);
             br.close();
             archivo.close();
-            System.out.println("Termine el try del read");
+            Log.d("Debug", "termine el try de read");
         } catch (Exception e){
-            System.out.println("Entre al catch del read");
+            Log.d("Debug", "entre al catch en read");
             e.printStackTrace();
         }
     }

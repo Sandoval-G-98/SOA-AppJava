@@ -1,4 +1,4 @@
-package com.example.laclande.user;
+package user;
 
 public class User {
     private String email;

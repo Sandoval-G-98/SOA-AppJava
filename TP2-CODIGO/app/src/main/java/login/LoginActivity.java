@@ -1,6 +1,7 @@
 package login;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -16,18 +17,24 @@ import java.util.regex.Pattern;
 
 import Asincrono.AsyncLogin;
 import register.RegisterActivity;
+import utils.BatteryReceiver;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail;
     private EditText inputPassword;
     private String email;
     private String password;
+    private TextView batteryLevel;
+    private BatteryReceiver battery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        batteryLevel = findViewById(R.id.batteryLevel2);
+        battery = new BatteryReceiver(batteryLevel);
+        registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
         //Funcionalidad de Atras, vuelve a Login
         TextView linkToRegister = findViewById(R.id.toRegister);
@@ -38,6 +45,12 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(register);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy(){
+        unregisterReceiver(battery);
+        super.onDestroy();
     }
 
     public void handleLogin(View view) {

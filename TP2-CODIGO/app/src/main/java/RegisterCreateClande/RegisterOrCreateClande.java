@@ -11,13 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.Authentication.R;
-import utils.Battery;
+import utils.BatteryReceiver;
 import CreateClande.CreateClande;
 import JoinClande.JoinClande;
 
 public class RegisterOrCreateClande extends AppCompatActivity {
 
     private TextView batteryLevel;
+    private BatteryReceiver battery;
     private String email;
     private TextView clanders10to18;
     private TextView clandes10to18;
@@ -34,9 +35,9 @@ public class RegisterOrCreateClande extends AppCompatActivity {
 
         email = getIntent().getStringExtra("email");
 
-        batteryLevel = findViewById(R.id.batteryLevel3);
-        Battery bat = new Battery(batteryLevel);
-        this.registerReceiver(bat.setBatInfo(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        batteryLevel = findViewById(R.id.batteryLevel4);
+        battery = new BatteryReceiver(batteryLevel);
+        registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         clandes10to18 = findViewById(R.id.clandesCreate10To18hours);
         clanders10to18 = findViewById(R.id.clanders10to18hours);
 
@@ -60,6 +61,12 @@ public class RegisterOrCreateClande extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy(){
+        unregisterReceiver(battery);
+        super.onDestroy();
     }
 
     public void readPreferences(){

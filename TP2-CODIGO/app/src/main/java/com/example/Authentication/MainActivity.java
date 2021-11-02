@@ -26,17 +26,18 @@ import javax.mail.Session;
 
 import Asincrono.AsyncSendEmail;
 import login.LoginActivity;
-import utils.Battery;
+import utils.BatteryReceiver;
 
 public class MainActivity extends Activity {
 
-    Session session = null;
-    Context context = null;
-    EditText receiver, textCode;
-    String rec, subject, textMessage, codeValidate;
-    int code = new Random().nextInt(9999) + 1000;
-    TextView batteryLevel;
-    int REQUEST_CODE = 200;
+    private Session session = null;
+    private Context context = null;
+    private EditText receiver, textCode;
+    private String rec, subject, textMessage, codeValidate;
+    private int code = new Random().nextInt(9999) + 1000;
+    private TextView batteryLevel;
+    private int REQUEST_CODE = 200;
+    private BatteryReceiver battery;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -45,8 +46,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         batteryLevel = findViewById(R.id.batteryLevel);
-        Battery bat = new Battery(batteryLevel);
-        this.registerReceiver(bat.setBatInfo(), new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        battery = new BatteryReceiver(batteryLevel);
+        registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
         context = this;
 
@@ -89,6 +90,12 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy(){
+        unregisterReceiver(battery);
+        super.onDestroy();
     }
 
     public boolean checkEmail(String email){

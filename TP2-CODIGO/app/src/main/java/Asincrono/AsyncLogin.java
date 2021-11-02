@@ -1,15 +1,11 @@
 package Asincrono;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.example.laclande.communication.Communication;
-import com.example.laclande.user.User;
-
+import communication.Communication;
+import user.User;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import RegisterCreateClande.RegisterOrCreateClande;
 import login.LoginActivity;
 

@@ -1,22 +1,26 @@
 package RegisterCreateClande;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.Authentication.R;
-import utils.BatteryReceiver;
+
+import Asincrono.AsyncTimer;
 import CreateClande.CreateClande;
 import JoinClande.JoinClande;
+import utils.BatteryReceiver;
 
 public class RegisterOrCreateClande extends AppCompatActivity {
-
     private TextView batteryLevel;
     private BatteryReceiver battery;
     private String email;
@@ -24,6 +28,10 @@ public class RegisterOrCreateClande extends AppCompatActivity {
     private TextView clandesCreated;
     private SharedPreferences preferences_register;
     private SharedPreferences preferences_login;
+
+    private SharedPreferences dataUser;
+
+    private AsyncTimer asyncTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,20 +43,24 @@ public class RegisterOrCreateClande extends AppCompatActivity {
         loggers = findViewById(R.id.idLogueados10a18);
         clandesCreated = findViewById(R.id.idClandesCreadas10a18);
 
-        email = getIntent().getStringExtra("email");
-
         batteryLevel = findViewById(R.id.batteryLevel4);
         battery = new BatteryReceiver(batteryLevel);
         registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
 
         readPreferences();
+        setPreferencesUser();
+
+        // Log.d("Debug", "MOSTRAR DATAUSER REGISTER OR CREATE CLANDE:::");
+        // Log.d("Debug", dataUser.getString("email",""));
+        // Log.d("Debug", dataUser.getString("token",""));
+        // Log.d("Debug","VALOR DEL TIMER CUANDO SE CREA:" + String.valueOf(dataUser.getLong("timeActually",0)));
 
         registerClande.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                asyncTimer.cancel(true);
                 Intent registerClandeActivity = new Intent(RegisterOrCreateClande.this, CreateClande.class);
-                registerClandeActivity.putExtra("email", email);
                 startActivity(registerClandeActivity);
             }
         });
@@ -56,8 +68,8 @@ public class RegisterOrCreateClande extends AppCompatActivity {
         joinClande.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                asyncTimer.cancel(true);
                 Intent joinClandeActivity = new Intent(RegisterOrCreateClande.this, JoinClande.class);
-                joinClandeActivity.putExtra("email", email);
                 startActivity(joinClandeActivity);
             }
         });
@@ -76,5 +88,24 @@ public class RegisterOrCreateClande extends AppCompatActivity {
 
         loggers.setText("Logueados de 10 a 18: "+ String.valueOf(preferences_login.getInt("logingClanders_10_to_18", 0)));
         clandesCreated.setText("Clandes creadas de 10 a 18: " + String.valueOf(preferences_register.getInt("registerClande_10_to_18", 0)));
+    }
+
+    public void setPreferencesUser(){
+        dataUser = getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = dataUser.edit();
+        myEdit.putLong("timeActually", System.currentTimeMillis());
+        myEdit.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dataUser = getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        this.asyncTimer = new AsyncTimer( RegisterOrCreateClande.this);
+        this.asyncTimer.execute(dataUser.getLong("timeActually",0));
+    }
+
+    public void showMessage(String message){
+        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
     }
 }

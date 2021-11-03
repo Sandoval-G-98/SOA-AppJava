@@ -36,6 +36,7 @@ import java.util.Calendar;
 import utils.db.AdminSQLiteOperHelper;
 import utils.BatteryReceiver;
 import RegisterCreateClande.RegisterOrCreateClande;
+import utils.BatteryReceiver;
 
 public class CreateClande extends AppCompatActivity implements SensorEventListener {
 
@@ -49,7 +50,6 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
     private String streetName;
     private String altitudeStreet;
     private String description;
-    private String email;
     private Context context = this;
     private SensorManager sm;
     private Sensor sensor;
@@ -62,6 +62,10 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
     private String dateHourClande;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+
+    private SharedPreferences dataUser;
+
+    private AsyncTimer asyncTimer;
     int mov=0;
 
     private AdminSQLiteOperHelper db;
@@ -73,7 +77,7 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_create_clande);
         db = new AdminSQLiteOperHelper(this);
 
-        email = getIntent().getStringExtra("email");
+        dataUser = this.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
 
         batteryLevel = findViewById(R.id.batteryLevel5);
         battery = new BatteryReceiver(batteryLevel);
@@ -149,6 +153,19 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dataUser = this.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        this.asyncTimer = new AsyncTimer( this);
+        this.asyncTimer.execute(dataUser.getLong("timeActually",0));
+    }
+
+    @Override
+    public void onBackPressed() {
+        asyncTimer.cancel(true);
+        super.onBackPressed();
+    }
 
     private boolean checkFields(){
 
@@ -214,7 +231,9 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
             db.addInMyTableClandes(email,province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
             Toast.makeText(context, "Se guardó la informacion" , Toast.LENGTH_LONG).show();
             Intent createOrJoinClandeActivity = new Intent(CreateClande.this, RegisterOrCreateClande.class);
-            createOrJoinClandeActivity.putExtra("email",email);
+            createOrJoinClandeActivity.putExtra("email",dataUser.getString("email", ""));
+            createOrJoinClandeActivity.putExtra("token",dataUser.getString("token", ""));
+            createOrJoinClandeActivity.putExtra("tokenRefresh",dataUser.getString("tokenRefresh", ""));
             startActivity(createOrJoinClandeActivity);
         }
     }

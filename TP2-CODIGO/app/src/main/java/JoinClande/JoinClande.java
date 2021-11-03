@@ -3,9 +3,9 @@ package JoinClande;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +17,7 @@ import com.example.Authentication.R;
 
 import java.util.List;
 
+import Asincrono.AsyncTimer;
 import utils.BatteryReceiver;
 import utils.Clande;
 import utils.ClandeAdapter;
@@ -30,11 +31,15 @@ public class JoinClande extends AppCompatActivity {
     private BatteryReceiver battery;
     private AdminSQLiteOperHelper db;
     private String emailParticipant;
+    private SharedPreferences dataUser;
+    private AsyncTimer asyncTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_clande);
+        
+        dataUser = this.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
 
         Toast.makeText(this, "Debe hacer click sobre una clande para indicar que asistirá", Toast.LENGTH_LONG).show();
 
@@ -72,6 +77,21 @@ public class JoinClande extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dataUser = this.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        this.asyncTimer = new AsyncTimer( this);
+        this.asyncTimer.execute(dataUser.getLong("timeActually",0));
+    }
+
+    @Override
+    public void onBackPressed() {
+        asyncTimer.cancel(true);
+        super.onBackPressed();
+    }
+
 
     @Override
     protected void onDestroy(){

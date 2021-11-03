@@ -3,10 +3,11 @@
     package="com.example.Authentication">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-    <uses-feature android:name="android.hardware.sensor.accelerometer"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.sensor.accelerometer" />
 
     <application
         android:allowBackup="true"
@@ -16,10 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LaClande"
         android:usesCleartextTraffic="true">
-        <activity android:name="JoinClande.JoinClande"/>
+        <activity
+            android:name="ModalKeepSession.ModalKeepSession"
+            android:exported="false" />
+        <activity android:name="JoinClande.JoinClande" />
         <activity android:name="CreateClande.CreateClande" />
         <activity android:name="RegisterCreateClande.RegisterOrCreateClande" />
-
         <activity
             android:name="login.LoginActivity"
             android:exported="true"

@@ -21,6 +21,7 @@
     <string name="commission_help">Choose Commissions</string>
     <string name="comision_martes">2900</string>
     <string name="comision_miercoles">3900</string>
+    <string name="celsius">&#176;C</string>
 
     <string-array name="optionsCommission">
         <item>@string/comision_martes</item>

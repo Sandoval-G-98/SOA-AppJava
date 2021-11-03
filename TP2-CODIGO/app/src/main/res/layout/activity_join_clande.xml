@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="50dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
+    tools:context="JoinClande.JoinClande">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerClandes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="213dp"
+        android:layout_height="29dp"
+        android:text="Clandes Disponibles"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/batteryLevel6"
+        android:layout_width="108sp"
+        android:layout_height="25sp"
+        android:layout_marginStart="270sp"
+        android:layout_marginLeft="270sp" />
+</RelativeLayout>

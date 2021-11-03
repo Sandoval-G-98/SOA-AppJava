@@ -1,3 +1,29 @@
 <resources>
+
     <string name="app_name">La Clande</string>
+    <string name="subject">Codigo de verificacion LaClande</string>
+    <string name="msgCodeVerification">Su codigo de verificacion es: </string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="lastname">LastName</string>
+    <string name="dni">DNI</string>
+    <string name="commission">Commission</string>
+    <string name="group">Group</string>
+    <string name="startLogin">Start App</string>
+    <string name="app_title">LA CLANDE</string>
+    <string name="text_back">Atrás</string>
+    <string name="login_button">Log-In</string>
+    <string name="login_register">¿Aún no estas registrado?</string>
+    <string name="register_button">Register</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="commission_help">Choose Commissions</string>
+    <string name="comision_martes">2900</string>
+    <string name="comision_miercoles">3900</string>
+
+    <string-array name="optionsCommission">
+        <item>@string/comision_martes</item>
+        <item>@string/comision_miercoles</item>
+    </string-array>
 </resources>

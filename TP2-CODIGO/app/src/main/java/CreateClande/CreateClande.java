@@ -1,21 +1,15 @@
 package CreateClande;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,19 +18,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.Authentication.R;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
-import utils.db.AdminSQLiteOperHelper;
-import utils.BatteryReceiver;
+import Asincrono.AsyncTimer;
 import RegisterCreateClande.RegisterOrCreateClande;
 import utils.BatteryReceiver;
+import utils.db.AdminSQLiteOperHelper;
 
 public class CreateClande extends AppCompatActivity implements SensorEventListener {
 
@@ -199,7 +190,7 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
         TextView dateClande = findViewById(R.id.TextDateClande);
         String date = dateClande.toString();
 
-        if(db.isInMyClandes(email, fromHourClande, toHourClande, date)){
+        if(db.isInMyClandes(dataUser.getString("email", ""), fromHourClande, toHourClande, date)){
             Toast.makeText(this, "Ya creó una clande con la misma fecha y hora", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -227,8 +218,8 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
             mov=0;
             Toast.makeText(context, "Se creó la clande correctamente", Toast.LENGTH_LONG).show();
             storePreference();
-            db.addInTableAllClandes(email,province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
-            db.addInMyTableClandes(email,province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
+            db.addInTableAllClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
+            db.addInMyTableClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
             Toast.makeText(context, "Se guardó la informacion" , Toast.LENGTH_LONG).show();
             Intent createOrJoinClandeActivity = new Intent(CreateClande.this, RegisterOrCreateClande.class);
             createOrJoinClandeActivity.putExtra("email",dataUser.getString("email", ""));

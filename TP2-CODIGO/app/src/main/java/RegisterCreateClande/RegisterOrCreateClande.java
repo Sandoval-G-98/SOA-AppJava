@@ -9,7 +9,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -56,8 +55,6 @@ public class RegisterOrCreateClande extends AppCompatActivity implements SensorE
         batteryLevel = findViewById(R.id.batteryLevel4);
         battery = new BatteryReceiver(batteryLevel);
         registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        clandes10to18 = findViewById(R.id.clandesCreate10To18hours);
-        clanders10to18 = findViewById(R.id.clanders10to18hours);
         ambientTemperature = findViewById(R.id.ambientTemperature);
         temperatureText = findViewById(R.id.temperatureText);
 
@@ -122,6 +119,7 @@ public class RegisterOrCreateClande extends AppCompatActivity implements SensorE
     @Override
     protected void onResume() {
         super.onResume();
+        sm.registerListener(this, sensorTemperature, SensorManager.SENSOR_DELAY_NORMAL);
         dataUser = getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
         this.asyncTimer = new AsyncTimer( RegisterOrCreateClande.this);
         this.asyncTimer.execute(dataUser.getLong("timeActually",0));
@@ -141,12 +139,6 @@ public class RegisterOrCreateClande extends AppCompatActivity implements SensorE
 
         ambientTemperature.setText(ambient_temperature + getResources().getString(R.string.celsius));
         temperatureText.setText(String.valueOf(ambient_temperature > 23 ? tabuenoString : tamaloString));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sm.registerListener(this, sensorTemperature, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override

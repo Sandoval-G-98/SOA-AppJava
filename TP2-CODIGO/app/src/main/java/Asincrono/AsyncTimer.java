@@ -2,14 +2,13 @@ package Asincrono;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import refresh.Refresh;
 
 
 public class AsyncTimer extends AsyncTask<Object, Void, Boolean> {
     private Context context;
-    public static final long maxTimer = 15000;
+    public static final long maxTimer = 1000 * 60 * 7;
 
     public AsyncTimer( Context context){
         this.context = context;

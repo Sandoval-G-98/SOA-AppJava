@@ -1,7 +1,6 @@
 package communication;
 
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -21,7 +20,7 @@ public class Communication {
     private static String URL_REGISTER = "http://so-unlam.net.ar/api/api/register";
     private static String URL_REFRESH = "http://so-unlam.net.ar/api/api/refresh";
     private static String URL_EVENT = "http://so-unlam.net.ar/api/api/event";
-    private static final String VAR_ENV = "PROD";
+    private static final String VAR_ENV = "TEST";
     public static String ERROR_MSG = "ERROR EN LA COMUNICACION";
 
     public String communicationLogin(String email, String password) {

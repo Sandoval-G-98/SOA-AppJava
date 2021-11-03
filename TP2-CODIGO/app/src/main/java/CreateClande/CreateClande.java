@@ -1,11 +1,15 @@
 package CreateClande;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -19,15 +23,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.util.Log;
+
 import com.example.Authentication.R;
+
+import org.w3c.dom.Text;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Calendar;
 
+import utils.db.AdminSQLiteOperHelper;
 import utils.BatteryReceiver;
 import RegisterCreateClande.RegisterOrCreateClande;
+import utils.BatteryReceiver;
 
 public class CreateClande extends AppCompatActivity implements SensorEventListener {
 
@@ -41,7 +50,6 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
     private String streetName;
     private String altitudeStreet;
     private String description;
-    private String email;
     private Context context = this;
     private SensorManager sm;
     private Sensor sensor;
@@ -54,16 +62,22 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
     private String dateHourClande;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+
+    private SharedPreferences dataUser;
+
+    private AsyncTimer asyncTimer;
     int mov=0;
-    final int LIMIT_SUP_HOUR = 18;
-    final int LIMIT_INF_HOUR = 10;
+
+    private AdminSQLiteOperHelper db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_clande);
+        db = new AdminSQLiteOperHelper(this);
 
-        email = getIntent().getStringExtra("email");
+        dataUser = this.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
 
         batteryLevel = findViewById(R.id.batteryLevel5);
         battery = new BatteryReceiver(batteryLevel);
@@ -139,9 +153,21 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dataUser = this.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        this.asyncTimer = new AsyncTimer( this);
+        this.asyncTimer.execute(dataUser.getLong("timeActually",0));
+    }
+
+    @Override
+    public void onBackPressed() {
+        asyncTimer.cancel(true);
+        super.onBackPressed();
+    }
 
     private boolean checkFields(){
-        boolean fieldsCorrects = true;
 
         edViewProvince = findViewById(R.id.provinceClande);
         edViewLocality = findViewById(R.id.localityClande);
@@ -167,10 +193,18 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
         if(province.isEmpty() || locality.isEmpty() || postalCode.isEmpty() || streetName.isEmpty()
                 || altitudeStreet.isEmpty() || fromHourClande.isEmpty() || toHourClande.isEmpty() || dateHourClande.isEmpty()){
             Toast.makeText(this, "No pueden haber campos obligatorios vacíos", Toast.LENGTH_LONG).show();
-            fieldsCorrects = false;
+            return false;
         }
 
-        return fieldsCorrects;
+        TextView dateClande = findViewById(R.id.TextDateClande);
+        String date = dateClande.toString();
+
+        if(db.isInMyClandes(email, fromHourClande, toHourClande, date)){
+            Toast.makeText(this, "Ya creó una clande con la misma fecha y hora", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -192,15 +226,17 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
         if(mov == 2) {
             mov=0;
             Toast.makeText(context, "Se creó la clande correctamente", Toast.LENGTH_LONG).show();
-            //storePreference();
-            grabar(email,province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
-            read("test_registers_" + email + ".txt");
+            storePreference();
+            db.addInTableAllClandes(email,province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
+            db.addInMyTableClandes(email,province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
+            Toast.makeText(context, "Se guardó la informacion" , Toast.LENGTH_LONG).show();
             Intent createOrJoinClandeActivity = new Intent(CreateClande.this, RegisterOrCreateClande.class);
-            createOrJoinClandeActivity.putExtra("email",email);
+            createOrJoinClandeActivity.putExtra("email",dataUser.getString("email", ""));
+            createOrJoinClandeActivity.putExtra("token",dataUser.getString("token", ""));
+            createOrJoinClandeActivity.putExtra("tokenRefresh",dataUser.getString("tokenRefresh", ""));
             startActivity(createOrJoinClandeActivity);
         }
     }
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -209,9 +245,11 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
     private void storePreference() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int LIMIT_SUP_HOUR = 18;
+        final int LIMIT_INF_HOUR = 10;
 
         if( LIMIT_INF_HOUR <= hour && hour <= LIMIT_SUP_HOUR ) {
-            preferences = getSharedPreferences("metrics_register_clandes", Context.MODE_PRIVATE);
+            preferences = getSharedPreferences("metrics_register_clandes_prod_1", Context.MODE_PRIVATE);
             editor = preferences.edit();
 
             int info = preferences.getInt("registerClande_10_to_18", 0);
@@ -219,46 +257,6 @@ public class CreateClande extends AppCompatActivity implements SensorEventListen
 
             editor.putInt("registerClande_10_to_18",info);
             editor.commit();
-        }
-    }
-
-    private void grabar(String email, String provinceClande, String localityClande, String postalCodeClande, String streetClande,
-                        String altitudeClande, String descriptionClande, String fromHourClande, String toHourClande, String dateClande){
-        String nombreArchivo = "test_registers_" + email + ".txt";
-        String contenido = email + "|" + provinceClande + "|" + localityClande + "|" + postalCodeClande + "|" + streetClande + "|" + altitudeClande + "|"
-                + descriptionClande + "|" + fromHourClande + "|" + toHourClande + "|" + dateClande;
-
-        try {
-            OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput(nombreArchivo, Context.MODE_PRIVATE));
-            archivo.write(contenido);
-            archivo.flush();
-            archivo.close();
-            Log.d("Debug", "termine el try de grabar");
-        } catch (Exception e){
-            Log.d("Debug", "entre al catch en grabar");
-            e.printStackTrace();
-        }
-    }
-
-    private void read(String filename){
-        String nombreArchivo = filename;
-
-        try {
-            InputStreamReader archivo = new InputStreamReader(openFileInput(nombreArchivo));
-            BufferedReader br = new BufferedReader(archivo);
-            String linea = br.readLine();
-            String contenido = "";
-            while(linea != null){
-                contenido = contenido + linea + "\n";
-                linea = br.readLine();
-            }
-            System.out.println( "Read " + contenido);
-            br.close();
-            archivo.close();
-            Log.d("Debug", "termine el try de read");
-        } catch (Exception e){
-            Log.d("Debug", "entre al catch en read");
-            e.printStackTrace();
         }
     }
 }

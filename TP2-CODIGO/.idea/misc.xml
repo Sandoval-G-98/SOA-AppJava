@@ -3,12 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_create_clande.xml" value="0.29030797101449274" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1859375" />
-        <entry key="app/src/main/res/layout/activity_modal_keep_sesion.xml" value="0.3813405797101449" />
-        <entry key="app/src/main/res/layout/activity_modal_keep_session.xml" value="0.37228260869565216" />
-        <entry key="app/src/main/res/layout/activity_register.xml" value="0.3813405797101449" />
-        <entry key="app/src/main/res/layout/activity_register_or_create_clande.xml" value="0.29030797101449274" />
+        <entry key="..\:/Users/GuglielmoNicolas/Desktop/Sistemas Operativos Avanzados/Proyecto Android/SOA-AppJava/TP2-CODIGO/app/src/main/res/layout/activity_register_or_create_clande.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

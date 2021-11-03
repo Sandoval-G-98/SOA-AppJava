@@ -1,7 +1,5 @@
 package RegisterCreateClande;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,18 +15,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.Authentication.R;
-import utils.BatteryReceiver;
+
+import Asincrono.AsyncTimer;
 import CreateClande.CreateClande;
 import JoinClande.JoinClande;
+import utils.BatteryReceiver;
 
 public class RegisterOrCreateClande extends AppCompatActivity implements SensorEventListener {
 
     private TextView batteryLevel;
     private BatteryReceiver battery;
     private String email;
-    private TextView clanders10to18;
-    private TextView clandes10to18;
+    private TextView loggers;
+    private TextView clandesCreated;
     private TextView ambientTemperature;
     private TextView temperatureText;
     private SharedPreferences preferences_register;
@@ -38,6 +40,9 @@ public class RegisterOrCreateClande extends AppCompatActivity implements SensorE
     private SensorManager sm;
     private Sensor sensorTemperature;
 
+    private SharedPreferences dataUser;
+    private AsyncTimer asyncTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +50,8 @@ public class RegisterOrCreateClande extends AppCompatActivity implements SensorE
 
         Button registerClande = findViewById(R.id.buttonRegisterClande);
         Button joinClande = findViewById(R.id.buttonJoinClande);
-
-        email = getIntent().getStringExtra("email");
+        loggers = findViewById(R.id.idLogueados10a18);
+        clandesCreated = findViewById(R.id.idClandesCreadas10a18);
 
         batteryLevel = findViewById(R.id.batteryLevel4);
         battery = new BatteryReceiver(batteryLevel);
@@ -64,15 +69,19 @@ public class RegisterOrCreateClande extends AppCompatActivity implements SensorE
             finish();
         }
 
-        //sm.registerListener( (SensorEventListener) context, sensorTemperature, SensorManager.SENSOR_TEMPERATURE);
-
         readPreferences();
+        setPreferencesUser();
+
+        // Log.d("Debug", "MOSTRAR DATAUSER REGISTER OR CREATE CLANDE:::");
+        // Log.d("Debug", dataUser.getString("email",""));
+        // Log.d("Debug", dataUser.getString("token",""));
+        // Log.d("Debug","VALOR DEL TIMER CUANDO SE CREA:" + String.valueOf(dataUser.getLong("timeActually",0)));
 
         registerClande.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                asyncTimer.cancel(true);
                 Intent registerClandeActivity = new Intent(RegisterOrCreateClande.this, CreateClande.class);
-                registerClandeActivity.putExtra("email", email);
                 startActivity(registerClandeActivity);
             }
         });
@@ -80,12 +89,11 @@ public class RegisterOrCreateClande extends AppCompatActivity implements SensorE
         joinClande.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                asyncTimer.cancel(true);
                 Intent joinClandeActivity = new Intent(RegisterOrCreateClande.this, JoinClande.class);
-                joinClandeActivity.putExtra("email", email);
                 startActivity(joinClandeActivity);
             }
         });
-
     }
 
     @Override
@@ -97,18 +105,37 @@ public class RegisterOrCreateClande extends AppCompatActivity implements SensorE
 
     public void readPreferences(){
 
-        preferences_register = getSharedPreferences("metrics_register_clandes", Context.MODE_PRIVATE);
-        preferences_login = getSharedPreferences("metrics_login_clanders", Context.MODE_PRIVATE);
+        preferences_register = getSharedPreferences("metrics_register_clandes_prod_1", Context.MODE_PRIVATE);
+        preferences_login = getSharedPreferences("metrics_login_clanders_prod_1", Context.MODE_PRIVATE);
 
-        clanders10to18.setText(String.valueOf(preferences_login.getInt("logingClanders_10_to_18", 0)));
-        clandes10to18.setText(String.valueOf(preferences_register.getInt("registerClande_10_to_18", 0)));
+        loggers.setText("Logueados de 10 a 18: "+ String.valueOf(preferences_login.getInt("logingClanders_10_to_18", 0)));
+        clandesCreated.setText("Clandes creadas de 10 a 18: " + String.valueOf(preferences_register.getInt("registerClande_10_to_18", 0)));
+    }
+
+    public void setPreferencesUser(){
+        dataUser = getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = dataUser.edit();
+        myEdit.putLong("timeActually", System.currentTimeMillis());
+        myEdit.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dataUser = getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        this.asyncTimer = new AsyncTimer( RegisterOrCreateClande.this);
+        this.asyncTimer.execute(dataUser.getLong("timeActually",0));
+    }
+
+    public void showMessage(String message){
+        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
 
         String tabuenoString = "La temperatura esta perfecto para una clande!!";
-        String tamaloString = "La temperatura es una garcha pero se puede escabiar!!";
+        String tamaloString = "La temperatura esta mala pero se puede escabiar!!";
 
         float ambient_temperature = event.values[0];
 

@@ -1,7 +1,9 @@
 package login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.Authentication.R;
 
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 import Asincrono.AsyncLogin;
@@ -26,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
     private TextView batteryLevel;
     private BatteryReceiver battery;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         batteryLevel = findViewById(R.id.batteryLevel2);
         battery = new BatteryReceiver(batteryLevel);
         registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        storePreference();
 
         //Funcionalidad de Atras, vuelve a Login
         TextView linkToRegister = findViewById(R.id.toRegister);
@@ -82,5 +89,23 @@ public class LoginActivity extends AppCompatActivity {
 
     public void showMessage(String message){
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+    }
+
+    private void storePreference() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int LIMIT_SUP_HOUR = 18;
+        final int LIMIT_INF_HOUR = 10;
+
+        if( LIMIT_INF_HOUR <= hour && hour <= LIMIT_SUP_HOUR ) {
+            preferences = getSharedPreferences("metrics_login_clanders_prod_1", Context.MODE_PRIVATE);
+            editor = preferences.edit();
+
+            int info = preferences.getInt("logingClanders_10_to_18", 0);
+            info+= 1;
+
+            editor.putInt("logingClanders_10_to_18",info);
+            editor.commit();
+        }
     }
 }

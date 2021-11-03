@@ -20,8 +20,8 @@ public class RegisterOrCreateClande extends AppCompatActivity {
     private TextView batteryLevel;
     private BatteryReceiver battery;
     private String email;
-    private TextView clanders10to18;
-    private TextView clandes10to18;
+    private TextView loggers;
+    private TextView clandesCreated;
     private SharedPreferences preferences_register;
     private SharedPreferences preferences_login;
 
@@ -32,14 +32,15 @@ public class RegisterOrCreateClande extends AppCompatActivity {
 
         Button registerClande = findViewById(R.id.buttonRegisterClande);
         Button joinClande = findViewById(R.id.buttonJoinClande);
+        loggers = findViewById(R.id.idLogueados10a18);
+        clandesCreated = findViewById(R.id.idClandesCreadas10a18);
 
         email = getIntent().getStringExtra("email");
 
         batteryLevel = findViewById(R.id.batteryLevel4);
         battery = new BatteryReceiver(batteryLevel);
         registerReceiver(battery, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        clandes10to18 = findViewById(R.id.clandesCreate10To18hours);
-        clanders10to18 = findViewById(R.id.clanders10to18hours);
+
 
         readPreferences();
 
@@ -60,7 +61,6 @@ public class RegisterOrCreateClande extends AppCompatActivity {
                 startActivity(joinClandeActivity);
             }
         });
-
     }
 
     @Override
@@ -71,10 +71,10 @@ public class RegisterOrCreateClande extends AppCompatActivity {
 
     public void readPreferences(){
 
-        preferences_register = getSharedPreferences("metrics_register_clandes", Context.MODE_PRIVATE);
-        preferences_login = getSharedPreferences("metrics_login_clanders", Context.MODE_PRIVATE);
+        preferences_register = getSharedPreferences("metrics_register_clandes_prod_1", Context.MODE_PRIVATE);
+        preferences_login = getSharedPreferences("metrics_login_clanders_prod_1", Context.MODE_PRIVATE);
 
-        clanders10to18.setText(String.valueOf(preferences_login.getInt("logingClanders_10_to_18", 0)));
-        clandes10to18.setText(String.valueOf(preferences_register.getInt("registerClande_10_to_18", 0)));
+        loggers.setText("Logueados de 10 a 18: "+ String.valueOf(preferences_login.getInt("logingClanders_10_to_18", 0)));
+        clandesCreated.setText("Clandes creadas de 10 a 18: " + String.valueOf(preferences_register.getInt("registerClande_10_to_18", 0)));
     }
 }

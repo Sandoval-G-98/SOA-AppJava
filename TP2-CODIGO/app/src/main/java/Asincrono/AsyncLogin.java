@@ -1,11 +1,16 @@
 package Asincrono;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import communication.Communication;
 import user.User;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
+
 import RegisterCreateClande.RegisterOrCreateClande;
 import login.LoginActivity;
 
@@ -59,10 +64,14 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
         if(aBoolean){
             this.loginActivity.showMessage("Credenciales correctas.");
             Intent registerOrCreateClande = new Intent(this.loginActivity, RegisterOrCreateClande.class);
+            registerOrCreateClande.putExtra("email", user.getEmail());
             this.loginActivity.startActivity(registerOrCreateClande);
         }else {
             this.loginActivity.showMessage(this.messageError);
         }
         super.onPostExecute(aBoolean);
     }
+
+
+
 }

@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 public class Communication {
     private static String URL_LOGIN = "http://so-unlam.net.ar/api/api/login";
     private static String URL_REGISTER = "http://so-unlam.net.ar/api/api/register";
-    private static final String VAR_ENV = "TEST";
+    private static final String VAR_ENV = "PROD";
     public static String ERROR_MSG = "ERROR EN LA COMUNICACION";
 
     public String communicationLogin(String email, String password) {

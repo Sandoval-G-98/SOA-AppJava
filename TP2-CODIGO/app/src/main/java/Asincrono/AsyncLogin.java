@@ -1,13 +1,17 @@
 package Asincrono;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
-import communication.Communication;
-import user.User;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import RegisterCreateClande.RegisterOrCreateClande;
+import communication.Communication;
 import login.LoginActivity;
+import user.User;
 
 public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
     private LoginActivity loginActivity;
@@ -20,13 +24,13 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Object... objects) {
-        Log.d("Debug","inicia execute Login");
+        // Log.d("Debug","inicia execute Login");
         Communication communication = new Communication();
         String response = communication.communicationLogin(
                 objects[0].toString(),
                 objects[1].toString());
 
-        Log.d("Debug", response);
+        // Log.d("Debug", response);
 
         if(response.compareTo(communication.ERROR_MSG) == 0){
             this.messageError = "Error en la conexion.";
@@ -39,9 +43,9 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
 
             if(result.get("success").toString().compareTo("true") == 0){
                 this.user = new User(objects[0].toString(), result.get("token").toString(), result.get("token_refresh").toString());
-                Log.d("Debug", this.user.getEmail());
-                Log.d("Debug", this.user.getToken());
-                Log.d("Debug", this.user.getTokenRefresh());
+                // Log.d("Debug", this.user.getEmail());
+                // Log.d("Debug", this.user.getToken());
+                // Log.d("Debug", this.user.getTokenRefresh());
                 return true;
             } else {
                 this.messageError = result.get("msg").toString();
@@ -59,6 +63,14 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
         if(aBoolean){
             this.loginActivity.showMessage("Credenciales correctas.");
             Intent registerOrCreateClande = new Intent(this.loginActivity, RegisterOrCreateClande.class);
+
+            SharedPreferences dataUser = this.loginActivity.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+            SharedPreferences.Editor myEdit = dataUser.edit();
+
+            myEdit.putString("email", this.user.getEmail());
+            myEdit.putString("token", this.user.getToken());
+            myEdit.putString("tokenRefresh", this.user.getTokenRefresh());
+            myEdit.apply();
             this.loginActivity.startActivity(registerOrCreateClande);
         }else {
             this.loginActivity.showMessage(this.messageError);

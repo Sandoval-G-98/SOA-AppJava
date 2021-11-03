@@ -75,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void handleRegister(View view) {
         if(validateForm()){
-            Log.d("Debug", "TRUE");
+            // Log.d("Debug", "TRUE");
             new AsyncRegister(RegisterActivity.this).execute(this.name,
                     this.lastname,
                     this.dni,

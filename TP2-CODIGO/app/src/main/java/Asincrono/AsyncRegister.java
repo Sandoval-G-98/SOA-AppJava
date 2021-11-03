@@ -23,7 +23,7 @@ public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected Boolean doInBackground(Object... objects) {
-        Log.d("Debug","inicia execute");
+        // Log.d("Debug","inicia execute");
         Communication communication = new Communication();
         String response = communication.communicationRegister(
                 objects[0].toString(),
@@ -35,7 +35,7 @@ public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
                 objects[6].toString());
 
 
-        Log.d("Debug", response);
+        // Log.d("Debug", response);
 
         if(response.compareTo(communication.ERROR_MSG) == 0){
             this.message = "Error en la conexion.";
@@ -48,9 +48,9 @@ public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
 
             if(result.get("success").toString().compareTo("true") == 0){
                 this.user = new User(objects[3].toString(), result.get("token").toString(), result.get("token_refresh").toString());
-                Log.d("Debug", this.user.getEmail());
-                Log.d("Debug", this.user.getToken());
-                Log.d("Debug", this.user.getTokenRefresh());
+                // Log.d("Debug", this.user.getEmail());
+                // Log.d("Debug", this.user.getToken());
+                // Log.d("Debug", this.user.getTokenRefresh());
                 return true;
             } else {
                 this.message = result.get("msg").toString();

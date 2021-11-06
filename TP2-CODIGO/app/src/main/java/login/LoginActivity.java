@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         if(validateForm()){
             new AsyncLogin(LoginActivity.this).execute(email,password);
         }
-    };
+    }
 
     public boolean validateForm() {
         boolean isValid = true;
@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
             int info = preferences.getInt("logingClanders_10_to_18", 0);
             info+= 1;
 
-            editor.putInt("logingClanders_10_to_18",info);
+            editor.putInt("logingClanders_10_to_18",info).apply();
             editor.commit();
         }
     }

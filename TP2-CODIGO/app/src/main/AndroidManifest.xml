@@ -20,18 +20,18 @@
         <activity
             android:name="ModalKeepSession.ModalKeepSession"
             android:exported="false" />
-        <activity android:name="JoinClande.JoinClande" />
-        <activity android:name="CreateClande.CreateClande" />
-        <activity android:name="RegisterCreateClande.RegisterOrCreateClande" />
+        <activity android:name="Views.JoinClandeActivity" />
+        <activity android:name="Views.CreateClandeActivity" />
+        <activity android:name="Views.RegisterOrCreateClandeActivity" />
         <activity
-            android:name="login.LoginActivity"
+            android:name="Views.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login" />
         <activity
-            android:name="register.RegisterActivity"
+            android:name="Views.RegisterActivity"
             android:exported="true"
             android:label="@string/title_activity_register" />
-        <activity android:name=".MainActivity">
+        <activity android:name="Views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

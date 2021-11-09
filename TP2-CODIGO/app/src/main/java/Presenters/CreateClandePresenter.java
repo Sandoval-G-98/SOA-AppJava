@@ -2,11 +2,7 @@ package Presenters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.Authentication.R;
-
 import java.util.Calendar;
 
 import Models.db.AdminSQLiteOperHelper;

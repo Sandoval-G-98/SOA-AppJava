@@ -32,7 +32,7 @@ public class JoinClandePresenter {
     public List<Clande> getClandes(){
         AdminSQLiteOperHelper db = new AdminSQLiteOperHelper(this.activity);
         List<Clande> c = db.getClandes();
-
+        db.close();
         return c;
     }
 

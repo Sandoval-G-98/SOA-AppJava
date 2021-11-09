@@ -3,16 +3,11 @@ package Models;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.Authentication.R;
-
 import Models.db.AdminSQLiteOperHelper;
 import Views.CreateClandeActivity;
 import Views.RegisterOrCreateClandeActivity;
@@ -64,8 +59,10 @@ public class SensorAcelerometerDetector implements SensorEventListener {
             String description = edViewDescription.getText().toString();
             AdminSQLiteOperHelper db = new AdminSQLiteOperHelper(this.activity);
             db.addInTableAllClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
-            db.addInMyTableClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
             db.close();
+            /*db = new AdminSQLiteOperHelper(this.activity);
+            db.addInMyTableClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
+            db.close();*/
             Toast.makeText(this.activity, "Se guardó la informacion" , Toast.LENGTH_LONG).show();
             Intent createOrJoinClandeActivity = new Intent(this.activity, RegisterOrCreateClandeActivity.class);
             createOrJoinClandeActivity.putExtra("email",dataUser.getString("email", ""));

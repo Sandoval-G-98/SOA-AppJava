@@ -5,10 +5,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,7 +26,6 @@ public class RegisterOrCreateClandeActivity extends AppCompatActivity  {
 
     private TextView batteryLevel;
     private BatteryReceiver battery;
-    private String email;
     private TextView loggers;
     private TextView clandesCreated;
     private TextView ambientTemperature;
@@ -73,9 +71,9 @@ public class RegisterOrCreateClandeActivity extends AppCompatActivity  {
 
         presenter.setPreferencesUser();
 
-        // Log.d("Debug", "MOSTRAR DATAUSER REGISTER OR CREATE CLANDE:::");
-        // Log.d("Debug", dataUser.getString("email",""));
-        // Log.d("Debug", dataUser.getString("token",""));
+        Log.d("Debug", "MOSTRAR DATAUSER REGISTER OR CREATE CLANDE:::");
+        Log.d("Debug", dataUser.getString("email",""));
+        Log.d("Debug", dataUser.getString("token",""));
         // Log.d("Debug","VALOR DEL TIMER CUANDO SE CREA:" + String.valueOf(dataUser.getLong("timeActually",0)));
 
         registerClande.setOnClickListener(new View.OnClickListener() {

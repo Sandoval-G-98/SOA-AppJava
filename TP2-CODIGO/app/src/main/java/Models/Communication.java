@@ -172,20 +172,21 @@ public class Communication {
         return result;
     }
 
-    public String communicationLoginRegisterEvent( String type, String description) {
+    public String communicationEvent( String type, String description, String tokenRefresh) {
         String result = null;
-        JSONObject object = new JSONObject();
+        JSONObject data = new JSONObject();
         try {
 
-            object.put("env",VAR_ENV);
-            object.put("type_events",type);
-            object.put("description",description);
+            data.put("env",VAR_ENV);
+            data.put("type_events",type);
+            data.put("description",description);
 
-            Log.i("debug106", "Se envia al servidor " + object.toString());
+            Log.i("debug106", "Se envia al servidor " + data.toString());
 
             URL url = new URL(URL_EVENT);
             HttpURLConnection connection;
             connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("Authorization", "Bearer " + tokenRefresh);
             connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             connection.setDoOutput(true);
             connection.setDoInput(true);
@@ -193,7 +194,7 @@ public class Communication {
             connection.setRequestMethod("POST");
 
             DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
-            dataOutputStream.write(object.toString().getBytes("UTF-8"));
+            dataOutputStream.write(data.toString().getBytes("UTF-8"));
 
             dataOutputStream.flush();
             connection.connect();
@@ -202,8 +203,7 @@ public class Communication {
 
             Log.i("debug106", "Response code" + String.valueOf(responseCode));
 
-            if (responseCode == HttpURLConnection.HTTP_OK
-                    ||responseCode == HttpURLConnection.HTTP_CREATED) {
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
 
                 InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
                 result = convertInputStreamToString(inputStreamReader).toString();

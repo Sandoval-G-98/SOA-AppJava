@@ -2,6 +2,7 @@ package Presenters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import Views.RegisterOrCreateClandeActivity;
 
@@ -17,6 +18,7 @@ public class RegisterOrCreateClandePresenter {
     }
 
     public void setPreferencesUser(){
+        Log.d("Debug", "setPreference context::" + this.activity.toString());
         dataUser = this.activity.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
         SharedPreferences.Editor myEdit = dataUser.edit();
         myEdit.putLong("timeActually", System.currentTimeMillis());

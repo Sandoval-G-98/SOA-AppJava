@@ -1,17 +1,22 @@
 package Models.Asincrono;
+
 import android.content.Intent;
 import android.os.AsyncTask;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import Views.RegisterOrCreateClandeActivity;
+
 import Models.Communication;
-import Views.LoginActivity;
+import Models.Refresh;
 import Models.User;
+import Views.LoginActivity;
+import Views.RegisterOrCreateClandeActivity;
 
 public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
     private LoginActivity loginActivity;
     private String messageError;
     private User user;
+    private JSONObject result = null;
 
     public AsyncLogin(LoginActivity loginActivity) {
         this.loginActivity = loginActivity;
@@ -32,7 +37,6 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
             return false;
         }
 
-        JSONObject result = null;
         try{
             result = new JSONObject(response);
 
@@ -58,8 +62,8 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
         if(aBoolean){
             this.loginActivity.showMessage("Credenciales correctas.");
             this.loginActivity.storePreferencesLogin();
+            new Refresh().setDataUserShared(this.loginActivity, this.user);
             Intent registerOrCreateClande = new Intent(this.loginActivity, RegisterOrCreateClandeActivity.class);
-            registerOrCreateClande.putExtra("email", user.getEmail());
             this.loginActivity.startActivity(registerOrCreateClande);
         }else {
             this.loginActivity.showMessage(this.messageError);

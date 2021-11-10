@@ -70,10 +70,14 @@ public class RegisterOrCreateClandeActivity extends AppCompatActivity  {
         }
 
         presenter.setPreferencesUser();
-
-        Log.d("Debug", "MOSTRAR DATAUSER REGISTER OR CREATE CLANDE:::");
-        Log.d("Debug", dataUser.getString("email",""));
-        Log.d("Debug", dataUser.getString("token",""));
+        dataUser = this.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        Log.d("Debug", "MOSTRAR DATAUSER REGISTER OR CREATE CLANDE ACTIVITY:::");
+        Log.d("Debug", "timeActually::::" + String.valueOf(dataUser.getLong("timeActually",0)));
+        Log.d("Debug", "MOSTRAR DATAUSER REGISTER OR CREATE CLANDE ACTIVITY 2:::");
+        Log.d("Debug", "email::::" + dataUser.getString("email","Email get fail"));
+        Log.d("Debug", "MOSTRAR DATAUSER REGISTER OR CREATE CLANDE ACTIVITY 3:::");
+        Log.d("Debug", "token::::" + dataUser.getString("token","Token get fail"));
+        Log.d("Debug", "No mostre nada jejejej");
         // Log.d("Debug","VALOR DEL TIMER CUANDO SE CREA:" + String.valueOf(dataUser.getLong("timeActually",0)));
 
         registerClande.setOnClickListener(new View.OnClickListener() {

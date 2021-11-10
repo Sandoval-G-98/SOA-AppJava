@@ -22,6 +22,7 @@ public class RegisterOrCreateClandePresenter {
         dataUser = this.activity.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
         SharedPreferences.Editor myEdit = dataUser.edit();
         myEdit.putLong("timeActually", System.currentTimeMillis());
+        Log.d("Debug", "Seteo TIME ACTUALLY::::" + dataUser.getLong("timeActually", 0));
         myEdit.apply();
     }
 

@@ -3,8 +3,11 @@ package Models;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.BatteryManager;
 import android.widget.TextView;
+
+import Models.Asincrono.AsyncEvent;
 
 
 public class BatteryReceiver extends BroadcastReceiver {

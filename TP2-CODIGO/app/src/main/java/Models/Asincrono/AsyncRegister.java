@@ -1,5 +1,7 @@
 package Models.Asincrono;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 
@@ -15,6 +17,7 @@ public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
     private RegisterActivity registerActivity;
     private String message;
     private User user;
+    private SharedPreferences dataUser;
 
     public AsyncRegister(RegisterActivity registerActivity){
         this.registerActivity = registerActivity;
@@ -67,6 +70,8 @@ public class AsyncRegister extends AsyncTask<Object, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         if(aBoolean){
             this.registerActivity.showMessage("Registro exitoso.");
+            dataUser = this.registerActivity.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+            new AsyncEvent(this.registerActivity).execute("Actividad Background", "Se registra evento de registro de usuario background", dataUser.getString("tokenRefresh", ""));
             Intent Login = new Intent(this.registerActivity, LoginActivity.class);
             registerActivity.startActivity(Login);
         }else {

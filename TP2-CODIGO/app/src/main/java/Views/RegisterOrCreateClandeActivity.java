@@ -100,8 +100,13 @@ public class RegisterOrCreateClandeActivity extends AppCompatActivity  {
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onPause(){
         sm.unregisterListener(listenerTemp);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy(){
         unregisterReceiver(battery);
         super.onDestroy();
     }

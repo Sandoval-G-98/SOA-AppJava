@@ -15,8 +15,6 @@ import Views.JoinClandeActivity;
 public class JoinClandePresenter {
 
     private JoinClandeActivity activity;
-    private ClandeAdapter adapterClandes;
-    private RecyclerView recyclerViewClandes;
 
     public JoinClandePresenter(JoinClandeActivity activity){
         this.activity = activity;

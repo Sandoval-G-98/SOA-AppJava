@@ -17,6 +17,7 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
     private String messageError;
     private User user;
     private JSONObject result = null;
+    private String token;
 
     public AsyncLogin(LoginActivity loginActivity) {
         this.loginActivity = loginActivity;
@@ -42,6 +43,7 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
 
             if(result.get("success").toString().compareTo("true") == 0){
                 this.user = new User(objects[0].toString(), result.get("token").toString(), result.get("token_refresh").toString());
+                this.token =   result.get("token_refresh").toString();
                 // Log.d("Debug", this.user.getEmail());
                 // Log.d("Debug", this.user.getToken());
                 // Log.d("Debug", this.user.getTokenRefresh());
@@ -63,6 +65,7 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
             this.loginActivity.showMessage("Credenciales correctas.");
             this.loginActivity.storePreferencesLogin();
             new Refresh().setDataUserShared(this.loginActivity, this.user);
+            new AsyncEvent(this.loginActivity).execute("Login", "Se registra login de usuario",  this.token);
             Intent registerOrCreateClande = new Intent(this.loginActivity, RegisterOrCreateClandeActivity.class);
             this.loginActivity.startActivity(registerOrCreateClande);
         }else {

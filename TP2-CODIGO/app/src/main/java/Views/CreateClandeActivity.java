@@ -39,7 +39,6 @@ public class CreateClandeActivity extends AppCompatActivity  {
     private Context context = this;
     private SensorManager sm;
     private Sensor sensor;
-    private SensorEventListener event;
     private Button buttonFromHourClande;
     private Button buttonToHourClande;
     private Button buttonDateClande;
@@ -170,9 +169,14 @@ public class CreateClandeActivity extends AppCompatActivity  {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause(){
         sm.unregisterListener(acelerometerDetector);
         unregisterReceiver(battery);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
     }
 

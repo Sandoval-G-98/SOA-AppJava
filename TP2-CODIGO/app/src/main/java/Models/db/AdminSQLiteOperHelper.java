@@ -59,8 +59,18 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
 
         if (db != null) {
             db.execSQL("INSERT INTO myClandesProd(owner, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
-            db.execSQL("INSERT INTO joinClandeProd(owner, participan, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
             Log.d("Debug", "Estoy en addInMyTableClandes");
+        }
+        db.close();
+    }
+
+    public void addInTableJoinClande(String email, String provinceClande, String localityClande, String postalCodeClande, String streetClande,
+                                    String altitudeClande, String descriptionClande, String fromHourClande, String toHourClande, String dateClande) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if (db != null) {
+            db.execSQL("INSERT INTO joinClandeProd(owner, participan, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
+            Log.d("Debug", "Estoy en addInTableJoinClande");
         }
         db.close();
     }

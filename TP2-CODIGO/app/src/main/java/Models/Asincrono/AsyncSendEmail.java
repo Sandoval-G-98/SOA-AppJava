@@ -2,6 +2,7 @@ package Models.Asincrono;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class AsyncSendEmail extends AsyncTask<String, Void, String> {
     private EditText reciep;
     private ProgressDialog pdialog = null;
     private Context context;
+    private SharedPreferences dataUser;
 
 
     public AsyncSendEmail(Session session, String message, String subject, String rec, EditText reciep, Context context) {
@@ -78,5 +80,7 @@ public class AsyncSendEmail extends AsyncTask<String, Void, String> {
         pdialog.dismiss();
         reciep.setText("");
         Toast.makeText(context, "Email enviado", Toast.LENGTH_LONG).show();
+        dataUser = this.context.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        new AsyncEvent(this.context).execute("Actividad Background", "Se registra el envio de correo background", dataUser.getString("tokenRefresh", ""));
     }
 }

@@ -9,6 +9,8 @@ import android.hardware.SensorEventListener;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import Models.Asincrono.AsyncEvent;
 import Models.db.AdminSQLiteOperHelper;
 import Views.CreateClandeActivity;
 import Views.RegisterOrCreateClandeActivity;
@@ -37,7 +39,7 @@ public class SensorAcelerometerDetector implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        dataUser = this.activity.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+
 
         if(event.values[0] > 5 && mov == 0) {
             mov++;
@@ -48,6 +50,8 @@ public class SensorAcelerometerDetector implements SensorEventListener {
         if(mov == 2) {
             mov=-1;
             Toast.makeText(this.activity, "Se creó la clande correctamente", Toast.LENGTH_LONG).show();
+            dataUser = this.activity.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+            new AsyncEvent(this.activity).execute("Actividad del sensor", "Se registra cambios en el acelerometro", dataUser.getString("tokenRefresh", ""));
             this.activity.storePreference();
             String province = edViewProvince.getText().toString();
             String locality = edViewLocality.getText().toString();
@@ -64,6 +68,7 @@ public class SensorAcelerometerDetector implements SensorEventListener {
             AdminSQLiteOperHelper db2 = new AdminSQLiteOperHelper(this.activity);
             db2.addInMyTableClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,dateClande);
             Log.d("Debug", "Guarde la clande en las mias");
+            AdminSQLiteOperHelper db3 = new AdminSQLiteOperHelper(this.activity);
             Toast.makeText(this.activity, "Se guardó la informacion" , Toast.LENGTH_LONG).show();
             Intent createOrJoinClandeActivity = new Intent(this.activity, RegisterOrCreateClandeActivity.class);
             createOrJoinClandeActivity.putExtra("email",dataUser.getString("email", ""));

@@ -61,7 +61,7 @@ public class AsyncRefresh extends AsyncTask<Object, Void, Boolean> {
             new Refresh().showMessage(this.context,"Token refrescado.");
             new Refresh().refreshTokenUser(token, tokenRefresh, context);
         }else {
-            new Refresh().showMessage(context,"Error al refrescar token. Loguee devuelta.");
+            new Refresh().showMessage(context,message);
             new Refresh().backToLogin(this.context);
             //Debo resetear todo y volver al login
             //Intent login = new Intent(this.registerOrCreateClande, LoginActivity.class);

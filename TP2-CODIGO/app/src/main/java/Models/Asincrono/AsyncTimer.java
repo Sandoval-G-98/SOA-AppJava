@@ -2,13 +2,14 @@ package Models.Asincrono;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import Models.Refresh;
 
 
 public class AsyncTimer extends AsyncTask<Object, Void, Boolean> {
     private Context context;
-    public static final long maxTimer = 60; //1000 * 60 * 7;
+    public static final long maxTimer = 1000 * 15; //1000 * 60 * 7;
 
     public AsyncTimer( Context context){
         this.context = context;
@@ -39,9 +40,9 @@ public class AsyncTimer extends AsyncTask<Object, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         if(aBoolean){
             new Refresh().askToRefresh(this.context);
-            // Log.d("Debug", "Se ejecuto el timer 1 minuto");
+            Log.d("Debug", "Se ejecuto el timer 15 seg");
         }else {
-            // Log.d("Debug", "Cancelamos ejecucion del timer");
+            Log.d("Debug", "Cancelamos ejecucion del timer");
         }
         super.onPostExecute(aBoolean);
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -51,6 +52,7 @@ public class Refresh {
     }
 
     public void refreshTokenUser(String token, String tokenRefresh, Context context){
+        dataUser = context.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
         SharedPreferences.Editor myEdit = dataUser.edit();
         myEdit.putString("token", token);
         myEdit.putString("tokenRefresh",tokenRefresh);
@@ -62,7 +64,22 @@ public class Refresh {
         this.asyncTimer.execute(dataUser.getLong("timeActually",0));
     }
 
-    public void showMessage(Context context,String message){
+    public void setDataUserShared(Context context, User user){
+        dataUser = context.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = dataUser.edit();
+        myEdit.putString("email", user.getEmail());
+        myEdit.putString("token",user.getToken());
+        myEdit.putString("tokenRefresh", user.getTokenRefresh());
+
+        Log.d("Debug", "Set Data Userrr::::::::");
+        Log.d("Debug", "email::::" + dataUser.getString("email", ""));
+        Log.d("Debug", "token::::" + dataUser.getString("token", ""));
+        Log.d("Debug", "tokenRefresh::::" + dataUser.getString("tokenRefresh", ""));
+
+        myEdit.apply();
+    }
+
+    public void showMessage(Context context,String message) {
         Toast.makeText(context,message,Toast.LENGTH_LONG).show();
     }
 }

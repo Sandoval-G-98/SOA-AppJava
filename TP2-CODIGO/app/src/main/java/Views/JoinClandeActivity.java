@@ -21,7 +21,6 @@ import Models.Asincrono.AsyncTimer;
 import Models.BatteryReceiver;
 import Models.Clande;
 import Models.ClandeAdapter;
-import Models.db.AdminSQLiteOperHelper;
 import Presenters.JoinClandePresenter;
 
 public class JoinClandeActivity extends AppCompatActivity {

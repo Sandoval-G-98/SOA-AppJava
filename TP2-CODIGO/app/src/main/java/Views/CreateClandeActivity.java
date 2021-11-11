@@ -17,17 +17,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.Authentication.R;
-
-import java.util.Calendar;
-
 import Models.Asincrono.AsyncTimer;
 import Models.BatteryReceiver;
 import Models.SensorAcelerometerDetector;
-import Models.db.AdminSQLiteOperHelper;
 import Presenters.CreateClandePresenter;
 
 public class CreateClandeActivity extends AppCompatActivity  {
@@ -53,20 +47,14 @@ public class CreateClandeActivity extends AppCompatActivity  {
     private String toHourClande;
     private String dateHourClande;
     private CreateClandePresenter presenter;
-
     private SharedPreferences dataUser;
     private SensorAcelerometerDetector acelerometerDetector;
-
     private AsyncTimer asyncTimer;
-    int mov=0;
-
-    private AdminSQLiteOperHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_clande);
-        db = new AdminSQLiteOperHelper(this);
 
         dataUser = this.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
 
@@ -185,7 +173,6 @@ public class CreateClandeActivity extends AppCompatActivity  {
     protected void onDestroy() {
         sm.unregisterListener(acelerometerDetector);
         unregisterReceiver(battery);
-        db.close();
         super.onDestroy();
     }
 

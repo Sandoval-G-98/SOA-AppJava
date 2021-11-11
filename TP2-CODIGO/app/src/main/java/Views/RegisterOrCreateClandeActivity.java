@@ -66,10 +66,10 @@ public class RegisterOrCreateClandeActivity extends AppCompatActivity  {
         clandesCreated.setText("Clandes creadas de 10 a 18: " + presenter.readPreferencesRegisters());
 
 
-        if(sensorTemperature == null) {
+        /*if(sensorTemperature == null) {
             Toast.makeText(context, "No posee sensor de temperatura", Toast.LENGTH_LONG).show();
             finish();
-        }
+        }*/
 
         presenter.setPreferencesUser();
 

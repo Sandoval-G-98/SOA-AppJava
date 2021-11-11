@@ -38,23 +38,19 @@ public class CreateClandePresenter {
     public boolean checkFields(String province, String locality, String  postalCode, String streetName, String altitudeStreet, String fromHourClande,
                                 String toHourClande,String dateClande ){
 
-        AdminSQLiteOperHelper db = new AdminSQLiteOperHelper(this.activity);
-
         if(province.isEmpty() || locality.isEmpty() || postalCode.isEmpty() || streetName.isEmpty()
                 || altitudeStreet.isEmpty() || fromHourClande.isEmpty() || toHourClande.isEmpty() || dateClande.isEmpty()){
             Toast.makeText(this.activity, "No pueden haber campos obligatorios vacíos", Toast.LENGTH_LONG).show();
-            db.close();
             return false;
         }
 
+        AdminSQLiteOperHelper db = new AdminSQLiteOperHelper(this.activity);
         dataUser = this.activity.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
         if(db.isInMyClandes(dataUser.getString("email", ""), fromHourClande, toHourClande, dateClande)){
             Toast.makeText(this.activity, "Ya creó una clande con la misma fecha y hora", Toast.LENGTH_LONG).show();
-            db.close();
             return false;
         }
 
-        db.close();
         return true;
     }
 

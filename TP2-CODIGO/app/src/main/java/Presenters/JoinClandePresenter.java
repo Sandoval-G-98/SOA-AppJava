@@ -25,14 +25,12 @@ public class JoinClandePresenter {
     public boolean joinInClande(String codigo, String emailParticipant, String fromHourClande, String toHourClande, String dateClande){
         AdminSQLiteOperHelper db = new AdminSQLiteOperHelper(this.activity);
         boolean isInClande = db.joinInClande(codigo, emailParticipant, fromHourClande, toHourClande, dateClande);
-        db.close();
         return isInClande;
     }
 
     public List<Clande> getClandes(){
         AdminSQLiteOperHelper db = new AdminSQLiteOperHelper(this.activity);
         List<Clande> c = db.getClandes();
-        db.close();
         return c;
     }
 

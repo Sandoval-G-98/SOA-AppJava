@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.Authentication.R;
 
@@ -47,6 +48,7 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
 
         if (db != null) {
             db.execSQL("INSERT INTO createClandeProd(owner, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
+            Log.d("Debug", "Estoy en addInTableAllClandes");
         }
         db.close();
     }
@@ -57,6 +59,8 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
 
         if (db != null) {
             db.execSQL("INSERT INTO myClandesProd(owner, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
+            db.execSQL("INSERT INTO joinClandeProd(owner, participan, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
+            Log.d("Debug", "Estoy en addInMyTableClandes");
         }
         db.close();
     }
@@ -104,7 +108,7 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
     public boolean isInMyClandes(String email, String fromHourClande, String toHourClande, String dateClande) {
         boolean isInClande = false;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM myClandesProd WHERE owner='" + email + "' AND fromHour= '" + fromHourClande + "' AND toHour='" + toHourClande + "' AND dateClande='" + dateClande + "'";
         Cursor cursor = db.rawQuery(query, null);
 
@@ -119,7 +123,7 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
     public boolean isJoined(String email, String fromHourClande, String toHourClande, String dateClande) {
         boolean isInClande = false;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM joinClandeProd WHERE participan='" + email + "' AND fromHour= '" + fromHourClande + "' AND toHour='" + toHourClande + "' AND dateClande='" + dateClande + "'";
         Cursor cursor = db.rawQuery(query, null);
 
@@ -147,7 +151,7 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
 
         if(!isJoined(emailParticipant, fromHourClande, toHourClande, dateClande)){
 
-            SQLiteDatabase db = this.getWritableDatabase();
+            SQLiteDatabase db = this.getReadableDatabase();
             String sql = "SELECT codigo, owner, province, locality, postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande FROM createClandeProd WHERE codigo= '" + codigo + "'";
 
             Cursor cursor = db.rawQuery(sql, null);
@@ -167,12 +171,13 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
                 db.close();
                 cursor.close();
 
-                db = this.getWritableDatabase();
+                SQLiteDatabase db2 = this.getWritableDatabase();
 
-                if (db!=null) {
-                    db.execSQL("INSERT INTO joinClandeProd(owner, participan, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + emailOwner + "','" + emailParticipant + "','" + provinceOwner + "','" + localityCodeOwner + "','" + postalCodeOwner + "','" + streetOwner + "','" + altitudeStreetOwner + "','" + descriptionOwner + "','" + fromHourOwner + "','" + toHourOwner + "','" + dateClandeOwner + "')");
+                if (db2!=null) {
+                    db2.execSQL("INSERT INTO joinClandeProd(owner, participan, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + emailOwner + "','" + emailParticipant + "','" + provinceOwner + "','" + localityCodeOwner + "','" + postalCodeOwner + "','" + streetOwner + "','" + altitudeStreetOwner + "','" + descriptionOwner + "','" + fromHourOwner + "','" + toHourOwner + "','" + dateClandeOwner + "')");
                     isAddedToClande = true;
                 }
+                db2.close();
             }
 
             db.close();

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 import Models.db.AdminSQLiteOperHelper;
@@ -45,7 +46,7 @@ public class SensorAcelerometerDetector implements SensorEventListener {
         }
 
         if(mov == 2) {
-            mov=0;
+            mov=-1;
             Toast.makeText(this.activity, "Se creó la clande correctamente", Toast.LENGTH_LONG).show();
             this.activity.storePreference();
             String province = edViewProvince.getText().toString();
@@ -55,14 +56,14 @@ public class SensorAcelerometerDetector implements SensorEventListener {
             String altitudeStreet = edViewAltitudeStreet.getText().toString();
             String fromHourClande = edViewFromHourClande.getText().toString();
             String toHourClande = edViewToHourClande.getText().toString();
-            String dateHourClande = edViewDateClande.getText().toString();
+            String dateClande = edViewDateClande.getText().toString();
             String description = edViewDescription.getText().toString();
             AdminSQLiteOperHelper db = new AdminSQLiteOperHelper(this.activity);
-            db.addInTableAllClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
-            db.close();
-            /*db = new AdminSQLiteOperHelper(this.activity);
-            db.addInMyTableClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,edViewDateClande.getText().toString());
-            db.close();*/
+            db.addInTableAllClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,dateClande);
+            Log.d("Debug", "Guarde la clande en todas");
+            AdminSQLiteOperHelper db2 = new AdminSQLiteOperHelper(this.activity);
+            db2.addInMyTableClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,dateClande);
+            Log.d("Debug", "Guarde la clande en las mias");
             Toast.makeText(this.activity, "Se guardó la informacion" , Toast.LENGTH_LONG).show();
             Intent createOrJoinClandeActivity = new Intent(this.activity, RegisterOrCreateClandeActivity.class);
             createOrJoinClandeActivity.putExtra("email",dataUser.getString("email", ""));

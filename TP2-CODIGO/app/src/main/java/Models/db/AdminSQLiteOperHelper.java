@@ -48,7 +48,7 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
 
         if (db != null) {
             db.execSQL("INSERT INTO createClandeProd(owner, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
-            Log.d("Debug", "Estoy en addInTableAllClandes");
+            //Log.d("Debug", "Estoy en addInTableAllClandes");
         }
         db.close();
     }
@@ -59,7 +59,7 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
 
         if (db != null) {
             db.execSQL("INSERT INTO myClandesProd(owner, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
-            Log.d("Debug", "Estoy en addInMyTableClandes");
+            //Log.d("Debug", "Estoy en addInMyTableClandes");
         }
         db.close();
     }
@@ -70,7 +70,7 @@ public class AdminSQLiteOperHelper extends SQLiteOpenHelper {
 
         if (db != null) {
             db.execSQL("INSERT INTO joinClandeProd(owner, participan, province, locality , postalCode, street, altitudeStreet, description, fromHour, toHour, dateClande) VALUES('" + email + "','" + email + "','" + provinceClande + "','" + localityClande + "','" + postalCodeClande + "','" + streetClande + "','" + altitudeClande + "','" + descriptionClande + "','" + fromHourClande + "','" + toHourClande + "','" + dateClande + "')");
-            Log.d("Debug", "Estoy en addInTableJoinClande");
+            //Log.d("Debug", "Estoy en addInTableJoinClande");
         }
         db.close();
     }

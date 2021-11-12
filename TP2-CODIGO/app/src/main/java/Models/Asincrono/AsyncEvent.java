@@ -50,12 +50,12 @@ public class AsyncEvent extends AsyncTask<Object, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean aBoolean) {
-        if(aBoolean){
-            new Refresh().showMessage(this.context,"Evento registrado en " + this.messageEvent);
-            Log.d("Debug", "evento: " + this.messageEvent);
+        /*if(aBoolean){
+            //new Refresh().showMessage(this.context,"Evento registrado en " + this.messageEvent);
+            //Log.d("Debug", "evento: " + this.messageEvent);
         }else {
-            new Refresh().showMessage(this.context,"No se pudo registrar el evento correctamente!.");
-        }
+            //new Refresh().showMessage(this.context,"No se pudo registrar el evento correctamente!.");
+        }*/
         super.onPostExecute(aBoolean);
     }
 

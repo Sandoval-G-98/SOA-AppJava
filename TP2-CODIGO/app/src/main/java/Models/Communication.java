@@ -181,7 +181,7 @@ public class Communication {
             data.put("type_events",type);
             data.put("description",description);
 
-            Log.i("debug106", "Se envia al servidor " + data.toString());
+            //Log.i("debug106", "Se envia al servidor " + data.toString());
 
             URL url = new URL(URL_EVENT);
             HttpURLConnection connection;
@@ -201,7 +201,7 @@ public class Communication {
 
             int responseCode = connection.getResponseCode();
 
-            Log.i("debug106", "Response code" + String.valueOf(responseCode));
+            //Log.i("debug106", "Response code" + String.valueOf(responseCode));
 
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
 
@@ -225,7 +225,7 @@ public class Communication {
             result = ERROR_MSG;
         }
 
-        Log.i("debug106", "Recibo " + result);
+        //Log.i("debug106", "Recibo " + result);
 
         return result;
     }

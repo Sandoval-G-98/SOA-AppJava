@@ -71,10 +71,10 @@ public class Refresh {
         myEdit.putString("token",user.getToken());
         myEdit.putString("tokenRefresh", user.getTokenRefresh());
 
-        Log.d("Debug", "Set Data Userrr::::::::");
-        Log.d("Debug", "email::::" + dataUser.getString("email", ""));
-        Log.d("Debug", "token::::" + dataUser.getString("token", ""));
-        Log.d("Debug", "tokenRefresh::::" + dataUser.getString("tokenRefresh", ""));
+        //Log.d("Debug", "Set Data Userrr::::::::");
+        //Log.d("Debug", "email::::" + dataUser.getString("email", ""));
+        //Log.d("Debug", "token::::" + dataUser.getString("token", ""));
+        //Log.d("Debug", "tokenRefresh::::" + dataUser.getString("tokenRefresh", ""));
 
         myEdit.apply();
     }

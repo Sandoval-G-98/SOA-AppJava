@@ -65,7 +65,7 @@ public class AsyncLogin extends AsyncTask<Object, Void, Boolean> {
             this.loginActivity.showMessage("Credenciales correctas.");
             this.loginActivity.storePreferencesLogin();
             new Refresh().setDataUserShared(this.loginActivity, this.user);
-            new AsyncEvent(this.loginActivity).execute("Login", "Se registra login de usuario",  this.token);
+            new AsyncEvent(this.loginActivity).execute("Login", "Se registra |in de usuario",  this.token);
             Intent registerOrCreateClande = new Intent(this.loginActivity, RegisterOrCreateClandeActivity.class);
             this.loginActivity.startActivity(registerOrCreateClande);
         }else {

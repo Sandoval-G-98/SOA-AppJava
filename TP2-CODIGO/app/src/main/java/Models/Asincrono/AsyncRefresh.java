@@ -34,9 +34,9 @@ public class AsyncRefresh extends AsyncTask<Object, Void, Boolean> {
         JSONObject result = null;
         try {
             result = new JSONObject(response);
-            Log.d("Debug", "Json: " + result.toString());
+           // Log.d("Debug", "Json: " + result.toString());
             if(result.get("success").toString().compareTo("true") == 0){
-                Log.d("Debug", "Entre al success");
+                //Log.d("Debug", "Entre al success");
                 this.token = result.get("token").toString();
                 this.tokenRefresh = result.get("token_refresh").toString();
                 return true;

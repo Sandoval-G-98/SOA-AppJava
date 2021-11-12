@@ -49,7 +49,6 @@ public class SensorAcelerometerDetector implements SensorEventListener {
 
         if(mov == 2) {
             mov=-1;
-            Toast.makeText(this.activity, "Se creó la clande correctamente", Toast.LENGTH_LONG).show();
             dataUser = this.activity.getSharedPreferences("SharedUser", Context.MODE_PRIVATE);
             new AsyncEvent(this.activity).execute("Actividad del sensor", "Se registra cambios en el acelerometro", dataUser.getString("tokenRefresh", ""));
             this.activity.storePreference();
@@ -64,12 +63,11 @@ public class SensorAcelerometerDetector implements SensorEventListener {
             String description = edViewDescription.getText().toString();
             AdminSQLiteOperHelper db = new AdminSQLiteOperHelper(this.activity);
             db.addInTableAllClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,dateClande);
-            Log.d("Debug", "Guarde la clande en todas");
+            //Log.d("Debug", "Guarde la clande en todas");
             AdminSQLiteOperHelper db2 = new AdminSQLiteOperHelper(this.activity);
             db2.addInMyTableClandes(dataUser.getString("email", ""),province,locality,postalCode,streetName,altitudeStreet,description,fromHourClande,toHourClande,dateClande);
-            Log.d("Debug", "Guarde la clande en las mias");
-            AdminSQLiteOperHelper db3 = new AdminSQLiteOperHelper(this.activity);
-            Toast.makeText(this.activity, "Se guardó la informacion" , Toast.LENGTH_LONG).show();
+            //Log.d("Debug", "Guarde la clande en las mias");
+            Toast.makeText(this.activity, "Se creó la clande correctamente", Toast.LENGTH_LONG).show();
             Intent createOrJoinClandeActivity = new Intent(this.activity, RegisterOrCreateClandeActivity.class);
             createOrJoinClandeActivity.putExtra("email",dataUser.getString("email", ""));
             createOrJoinClandeActivity.putExtra("token",dataUser.getString("token", ""));
